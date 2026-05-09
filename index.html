@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ontology-dynamics-epistemology</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #e8e4dc;
+    --ink-dim: #7a7570;
+    --ink-faint: #3a3630;
+    --paper: #0f0e0c;
+    --paper-2: #161512;
+    --paper-3: #1e1c18;
+    --rule: #2a2824;
+    --accent: #c8b882;
+    --accent-dim: #6b5f3a;
+    --teal: #4db89a;
+    --teal-dim: #1e5044;
+    --coral: #d4705a;
+  }
+
+  html { background: var(--paper); color: var(--ink); font-family: 'IBM Plex Sans', sans-serif; font-weight: 300; line-height: 1.7; font-size: 16px; }
+
+  body { max-width: 720px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+
+  .site-tag { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 400; color: var(--ink-dim); letter-spacing: 0.1em; text-transform: lowercase; margin-bottom: 4rem; display: flex; align-items: center; gap: 1rem; }
+  .site-tag::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+  .lead { font-size: 15px; color: var(--ink-dim); font-family: 'IBM Plex Mono', monospace; font-style: italic; margin-bottom: 1rem; }
+
+  .answer { font-size: 22px; font-weight: 300; color: var(--ink); line-height: 1.5; margin-bottom: 3rem; }
+  .answer em { font-style: normal; color: var(--accent); }
+
+  hr { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+
+  .triad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin: 2.5rem 0; }
+
+  .triad-cell { background: var(--paper-2); padding: 1.5rem; }
+  .triad-cell .label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dim); margin-bottom: 0.75rem; }
+  .triad-cell .def { font-size: 15px; font-weight: 400; color: var(--ink); margin-bottom: 0.75rem; line-height: 1.4; }
+  .triad-cell ul { list-style: none; }
+  .triad-cell ul li { font-size: 12px; color: var(--ink-dim); line-height: 1.8; font-family: 'IBM Plex Mono', monospace; }
+  .triad-cell ul li::before { content: '↳ '; color: var(--ink-faint); }
+
+  p { font-size: 15px; color: var(--ink-dim); margin-bottom: 1.25rem; line-height: 1.8; }
+  p strong { font-weight: 400; color: var(--ink); }
+
+  .eq { font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--accent); background: var(--paper-3); border-left: 2px solid var(--accent-dim); padding: 1rem 1.5rem; margin: 1.5rem 0; line-height: 2; }
+
+  .analogy-block { margin: 2.5rem 0; }
+  .analogy-row { display: flex; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 1px; }
+  .analogy-row:last-child { margin-bottom: 0; }
+  .analogy-key { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-dim); background: var(--paper-3); padding: 0.75rem 1rem; min-width: 120px; display: flex; align-items: center; }
+  .analogy-val { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent); background: var(--paper-2); padding: 0.75rem 1rem; flex: 1; display: flex; align-items: center; }
+
+  .tensor-table { width: 100%; border-collapse: collapse; margin: 2rem 0; }
+  .tensor-table tr { border-bottom: 1px solid var(--rule); }
+  .tensor-table tr:last-child { border-bottom: none; }
+  .tensor-table td { padding: 0.85rem 0; font-size: 13px; vertical-align: top; }
+  .tensor-table .t-key { font-family: 'IBM Plex Mono', monospace; color: var(--accent); width: 200px; line-height: 1.5; }
+  .tensor-table .t-val { color: var(--ink-dim); }
+  .tensor-table .t-sep { width: 24px; color: var(--ink-faint); font-family: 'IBM Plex Mono', monospace; }
+
+  .phil-row { display: flex; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin: 2.5rem 0; }
+  .phil-cell { background: var(--paper-2); flex: 1; padding: 1.25rem; }
+  .phil-cell .name { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 0.35rem; letter-spacing: 0.02em; }
+  .phil-cell .note { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-dim); line-height: 1.6; }
+
+  .constraint-list { list-style: none; margin: 2rem 0; }
+  .constraint-list li { padding: 1rem 0 1rem 1.5rem; border-bottom: 1px solid var(--rule); font-size: 14px; color: var(--ink-dim); line-height: 1.75; position: relative; }
+  .constraint-list li:last-child { border-bottom: none; }
+  .constraint-list li::before { content: ''; position: absolute; left: 0; top: 1.5rem; width: 6px; height: 1px; background: var(--accent-dim); }
+  .constraint-list li strong { color: var(--ink); font-weight: 400; }
+  .constraint-list li em { color: var(--ink-dim); font-style: normal; font-family: 'IBM Plex Mono', monospace; font-size: 12px; display: block; margin-top: 0.25rem; }
+
+  .synthesis { background: var(--paper-3); border: 1px solid var(--rule); padding: 2rem; margin: 3rem 0; text-align: center; }
+  .synthesis .loop { font-family: 'IBM Plex Mono', monospace; font-size: 18px; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+  .synthesis .sub { font-size: 12px; color: var(--ink-dim); font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.08em; }
+
+  .coda { font-size: 17px; font-weight: 300; color: var(--ink); line-height: 1.7; margin-top: 3rem; }
+  .coda .pull { color: var(--teal); }
+
+  .section-head { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-dim); margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+
+<div class="site-tag">ontology-dynamics-epistemology</div>
+
+<p class="lead">Q: isn't virtually everything about</p>
+<p class="answer">ontology → dynamics → epistemology?</p>
+
+<hr>
+
+<p>Yes—if by that you mean:<br>
+<strong>what is</strong> → <strong>how it changes / behaves</strong> → <strong>what can be known about it</strong></p>
+
+<p>That triad shows up almost everywhere.</p>
+
+<div class="triad">
+  <div class="triad-cell">
+    <div class="label">Ontology</div>
+    <div class="def">What exists; the state space</div>
+    <ul>
+      <li>What are the "things"?</li>
+      <li>What degrees of freedom exist?</li>
+      <li>What distinctions matter?</li>
+    </ul>
+  </div>
+  <div class="triad-cell">
+    <div class="label">Dynamics</div>
+    <div class="def">Rules of transformation</div>
+    <ul>
+      <li>What interacts with what?</li>
+      <li>What are the update rules?</li>
+      <li>What generates trajectories?</li>
+    </ul>
+  </div>
+  <div class="triad-cell">
+    <div class="label">Epistemology</div>
+    <div class="def">What an observer can infer</div>
+    <ul>
+      <li>What is observable?</li>
+      <li>What is identifiable?</li>
+      <li>What remains hidden?</li>
+    </ul>
+  </div>
+</div>
+
+<p>That's basically:</p>
+
+<div class="eq">x<sub>t+1</sub> = f(x<sub>t</sub>)
+
+  ontology   → the space x lives in
+  dynamics   → the function f
+  epistemology → infer x or f from observations</div>
+
+<p class="section-head">The same structure, elsewhere</p>
+
+<div class="analogy-block">
+  <div class="analogy-row">
+    <div class="analogy-key">Bayesian</div>
+    <div class="analogy-val">prior structure → generative process → posterior belief</div>
+  </div>
+  <div class="analogy-row">
+    <div class="analogy-key">Physics</div>
+    <div class="analogy-val">configuration space → equations of motion → measurement</div>
+  </div>
+  <div class="analogy-row">
+    <div class="analogy-key">Personal identity</div>
+    <div class="analogy-val">"what am i?" → "how do i change?" → "how do i know?"</div>
+  </div>
+</div>
+
+<p class="section-head">Ukubona tensor language</p>
+
+<table class="tensor-table">
+  <tr><td class="t-key">Scalar / Action</td><td class="t-sep">→</td><td class="t-val">ontological commitment — "something is there"</td></tr>
+  <tr><td class="t-key">Vector / Intention</td><td class="t-sep">→</td><td class="t-val">directionality / dynamic force</td></tr>
+  <tr><td class="t-key">Matrix / Attention</td><td class="t-sep">→</td><td class="t-val">selective observation</td></tr>
+  <tr><td class="t-key">Tensor / Sensation</td><td class="t-sep">→</td><td class="t-val">structured evidence</td></tr>
+  <tr><td class="t-key">Eigenmode / Reaction</td><td class="t-sep">→</td><td class="t-val">stabilized knowledge / belief</td></tr>
+</table>
+
+<p>Even philosophy often secretly reduces to this:</p>
+
+<div class="phil-row">
+  <div class="phil-cell">
+    <div class="name">Parmenides</div>
+    <div class="note">obsessed over ontology<br>"what is"</div>
+  </div>
+  <div class="phil-cell">
+    <div class="name">Heraclitus</div>
+    <div class="note">obsessed over dynamics<br>"everything flows"</div>
+  </div>
+  <div class="phil-cell">
+    <div class="name">Kant</div>
+    <div class="note">obsessed over epistemology<br>"what can be known"</div>
+  </div>
+</div>
+
+<p>And the modern synthesis is: you can't separate them.</p>
+
+<ul class="constraint-list">
+  <li>
+    <strong>Your ontology constrains your dynamics</strong>
+    <em>think only particles exist → write particle equations; think fields exist → write field equations</em>
+  </li>
+  <li>
+    <strong>Your dynamics constrains your epistemology</strong>
+    <em>chaotic systems foreclose long-term prediction; reversible systems permit retrodiction; noisy systems limit inference</em>
+  </li>
+  <li>
+    <strong>Your epistemology feeds back into ontology</strong>
+    <em>what you can measure determines what you claim exists — wave function vs. hidden variables</em>
+  </li>
+</ul>
+
+<div class="synthesis">
+  <div class="loop">Ontology &nbsp;↔&nbsp; Dynamics &nbsp;↔&nbsp; Epistemology</div>
+  <div class="sub">a closed loop, not a chain</div>
+</div>
+
+<p class="coda">That's why control theory, neuroscience, politics, theology, and personal identity all rhyme.<br><span class="pull">That may be the universal compression.</span></p>
+
+</body>
+</html>
